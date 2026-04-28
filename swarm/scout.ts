@@ -1,0 +1,21 @@
+import { Agent } from "./agent";
+import Redis from "ioredis";
+
+const redis = new Redis(process.env.REDIS_URL!);
+
+export class ScoutAgent extends Agent {
+
+  async perceive() {
+    return null;
+  }
+
+  async act() {
+    const randomTask = {
+      id: crypto.randomUUID(),
+      path: "explore/unknown",
+      payload: { type: "discovery" }
+    };
+
+    await redis.rpush("tasks:queue", JSON.stringify(randomTask));
+  }
+}
